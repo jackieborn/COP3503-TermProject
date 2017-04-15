@@ -54,7 +54,8 @@ Statistics::Statistics(){
 }
 
 
-void Statistics::UpdatePlayerScore(string playerName, int score){
+void Statistics::UpdatePlayerScore(string playerName, int score)
+{
  
  //fileName is the name of the file that will be opened
  string fileName = playerName + ".txt";
@@ -70,11 +71,13 @@ void Statistics::UpdatePlayerScore(string playerName, int score){
  outfile.open(fileName, ios::app | ios_base::out | ios_base::in);
  
  //open file
- if(outfile.is_open()){
+ if(outfile.is_open())
+ {
     //read file by word
     outfile << score << endl;
  }
- else{
+ else
+ {
     outfile << score << endl;
 
 }
@@ -83,17 +86,23 @@ outfile.close();
 
 }
 
-int Statistics::NumberOfPlayerGames(string playerName){
+int Statistics::NumberOfPlayerGames(string playerName)
+{
     //opens file in read mode
     ifstream infile(playerName + ".txt");
+ 
     //variable that keeps count of how many scores there are in log, ie how many games played
     double numberOfGames = 0;
+ 
     //temp string reads in string scores from text file
     string temp;
+ 
     //reads from text file one word at a time, ie reads one score at a time
-    while(infile >> temp){
+    while(infile >> temp)
+    {
         numberOfGames++;
      }
+ 
      return numberOfGames;
 }
 
@@ -101,43 +110,60 @@ int Statistics::NumberOfPlayerGames(string playerName){
 void Statistics::UpdatePlayerHighestTile(string playerName, int tileScore){
     //holds the tile from the most recent game
     int currentTileScore;
+ 
     //opens string stream
     stringstream ss;
+ 
     //inputs tileScore into string stream
     ss << tileScore;
+ 
     //storoes tileScore as string
     string tileScoreToStr = ss.str();
+ 
     //concatenates file name
     string fileName = playerName + "_" + "TileScore" + ".txt";
+ 
     //open file in read mode
     ifstream infile(fileName);
+ 
     //if opening was succesful
-    if(infile.is_open()){
+    if(infile.is_open())
+    {
         //read score into currentTileScore
         infile >> currentTileScore;
+     
         //closes file
         infile.close();
+     
         //if new tile score is greater than old tile score
-        if(currentTileScore < tileScore){
+        if(currentTileScore < tileScore)
+        {
             //open write stream
             ofstream outfile;
+         
             //opens file in truncate mode, which deletes all past contents in the opened file
             outfile.open(fileName, ios::trunc);
+         
             //stores new score
             outfile << tileScore << endl;
+         
             //closes file
             outfile.close();
         }
 
     }
-    else{
+    else
+    {
         //file was not created. create a new file to store new player's tile information
         //open stream in write mode
         ofstream outfile;
+     
         //open file
         outfile.open(fileName);
+     
         //write to file
         outfile << tileScore << endl;
+     
         //close file
         outfile.close();
     }
@@ -152,28 +178,38 @@ bool fileExists(const string fileName)
 {
     //open file in read mode
     ifstream infile(fileName);
+ 
     //return true if file exists
     return infile.good();
 }
 
-double Statistics::Mean(string playerName){
+double Statistics::Mean(string playerName)
+{
     //opens file
     ifstream infile(playerName + ".txt");
+ 
     //stores sum of scores
     double sum = 0;
     double mean;
+ 
     //stores readline from file
     string temp;
+ 
     //calls NumberofPlayerGames functions to see how many games played by player
     int numOfGames = NumberOfPlayerGames(playerName);
+ 
     //reads in each
-    while(infile >> temp){
+    while(infile >> temp)
+    {
         //takes each score in string, coverts score to int using atoi function, and stores int
         cout << "Score: " << temp << endl;
+       
         sum += atoi(temp.c_str());
+     
         //divide sum by total games
         mean = sum/numOfGames;
      }
+ 
      return mean;
 }
 
