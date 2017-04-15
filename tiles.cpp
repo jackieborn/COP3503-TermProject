@@ -7,6 +7,7 @@
 #include <ctime>
 
 #include "tiles.h"
+#include "termProj.h"
 
 //Used for testing
 /*int main()
@@ -21,6 +22,7 @@
 	return 0;
 }*/
 
+//called once at the start of a new game to complete that pool set of 12
 void Tiles::initialPool()
 {
     pool.clear();
@@ -58,6 +60,7 @@ void Tiles::refreshTiles()
     pool.push_back(3);
 
     //If the max tile is above 24 (i.e., it's 48 or above), there's a chance to spawn a bonus tile
+    int maxTile = board.highestTile();
     if (maxTile > 24)
     {
         int j;
@@ -118,6 +121,3 @@ void Tiles::printPool()
     }
     cout << endl;
 }
-
-	 
-	
