@@ -128,7 +128,7 @@ int main()
                 }
 
                 //get new tile to spawn onto board
-                newTile = tileSet.getTile();
+                newTile = tileSet.getTile(board);
 
                 //place new tile on board
                 if(key == 'w')
@@ -151,6 +151,8 @@ int main()
                     //if player moved right, tile spawns in leftmost column
                     board.setTileValue(spawnTo, 0, newTile);
                 }
+
+
 
 
 
@@ -474,6 +476,55 @@ int Gameboard::highestTile()
     return high;
 
 }
+
+/*bool Gameboard::gameOver()
+{
+    //Checks to see if the game is over
+    //Game is over if the player cannot make anymore moves, if the board is full
+    bool notOver;
+
+    //Parse through the gameboard sideways
+    //Check to see if the tile to the right of the current can merge with the current tile
+    //Also checks to see if tile to the right is empty (is equal to 0)
+    //If it can or a space is empty, more moves can be made and game is not over
+    for(int i = 0; i < 4; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            int curr = gameboard[i][j];
+            int next = gameboard[i][j+1];
+
+            notOver = gameboard.canMerge(curr, next);
+
+            if(notOver || next == 0)
+            {
+                return notOver;
+            }
+        }
+
+        //Parse through the gameboard going down
+        //Check to see if the tile below the current can merge with the current tile
+        //Also checks to see if the tile below is empty
+        //If it can merge or a space is empty, more moves can be made and game is not over
+        for(int j = 0; j < 4; j++)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                int curr = gameboard[i][j];
+                int below = gameboard[i+1][j];
+
+                notOver = gameboard.canMerge(curr, below);
+
+                if(notOver || below == 0)
+                {
+                    return notOver;
+                }
+            }
+        }
+
+        return notOver;
+    }
+}*/
 
 //void seedNumGen()
 //{
