@@ -6,8 +6,8 @@
 #include <ctime>
 #include <iomanip>
 
-#include "termProj.h"
 #include "tiles.h"
+#include "termProj.h"
 
 
 
@@ -15,7 +15,7 @@ using namespace std;
 
 int main()
 {
-    srand(time(nullptr));//get current time as seed number for rand()
+    //srand(time(nullptr));//get current time as seed number for rand()
 
     string menuOpt; //which menu option user chooses
     Gameboard board; //create game board obj
@@ -25,6 +25,10 @@ int main()
     int movement[4] = {0};  //array to store which row/col saw movement after user plays a turn
                             //each index in array corresponds to a row/col
                             //make index =1, when that row/col had tiles that moved in it
+
+    Tiles tileSet;//create new tileSet object
+    bool firstTurn;//if player's 1st turn, must call initialPool since 9/12 tiles already on board
+    int newTile; //new tile that will spawn onto board every turn
 
 //--------------------------------------------------------------------------------------------------
 
@@ -47,6 +51,7 @@ int main()
         else if(menuOpt == "Start")//******************************************************************************
         {
             board.createBoard();
+            firstTurn = true;
 
             while(true)
             {
@@ -115,6 +120,41 @@ int main()
                     spawnTo = rand()%4;
                 }
 
+                //if player's first turn, must call initialPool (since 9 of 12 tiles already on board)
+                if(firstTurn)
+                {
+                    tileSet.initialPool();
+                    firstTurn = false;
+                }
+
+                //get new tile to spawn onto board
+                newTile = tileSet.getTile();
+
+                //place new tile on board
+                if(key == 'w')
+                {
+                    //if player moved up, tile spawns in bottom row
+                    board.setTileValue(3, spawnTo, newTile);
+                }
+                else if(key == 'a')
+                {
+                    //if player moved left, tile spawns in rightmost column
+                    board.setTileValue(spawnTo, 3, newTile);
+                }
+                else if(key == 's')
+                {
+                    //if player moved down, tile spawns in top row
+                    board.setTileValue(0, spawnTo, newTile);
+                }
+                else if(key == 'd')
+                {
+                    //if player moved right, tile spawns in leftmost column
+                    board.setTileValue(spawnTo, 0, newTile);
+                }
+
+
+
+
 
 
             }//while loop end
@@ -157,6 +197,12 @@ Gameboard::Gameboard()
 int Gameboard::getTileValue(int i, int j)
 {
     return gameboard[i][j];
+}
+
+//setter to place new tiles onto board
+int Gameboard::setTileValue(int i, int j, int value)
+{
+    gameboard[i][j] = value;
 }
 
 void Gameboard::createBoard()
@@ -411,6 +457,21 @@ void Gameboard::deleteBoard()
 
 int Gameboard::highestTile()
 {
+    int high = 0;
+    int temp = 0;
+
+    for(int i; i<4; i++)
+    {
+        for(int j; j<4; j++)
+        {
+            temp = gameboard[i][j];
+            if(temp > high)
+            {
+                high = temp;
+            }
+        }
+    }
+    return high;
 
 }
 
