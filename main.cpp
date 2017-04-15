@@ -10,6 +10,7 @@
 #include "tiles.h"
 
 
+
 using namespace std;
 
 int main()
@@ -25,7 +26,7 @@ int main()
                             //each index in array corresponds to a row/col
                             //make index =1, when that row/col had tiles that moved in it
 
-
+//--------------------------------------------------------------------------------------------------
 
     while(true)
         {
@@ -38,12 +39,12 @@ int main()
         cout << "Quit" << endl;
         cin >> menuOpt;
 
-        if(menuOpt == "Tutorial")//---------------------------------------------------------------
+        if(menuOpt == "Tutorial")//********************************************************************************
         {
             cout << "go to tutorial" <<endl;
         }
 
-        else if(menuOpt == "Start")//---------------------------------------------------------------
+        else if(menuOpt == "Start")//******************************************************************************
         {
             board.createBoard();
 
@@ -105,27 +106,27 @@ int main()
                     }
                 }
 
-            //generate random number to pick a index from movement array
-            //which will be the row/col the new tile generates in
-            while(true)
-            int spawnTo = rand()%4;
-            if(movement[spawnTo] == 0)
-            {
-                spawnTo = rand()%4;
-            }
+                //generate random number to pick a index from movement array
+                //which will be the row/col the new tile generates in
+                int spawnTo = rand()%4;
+                //while the array index is 0 (row/col that didn't see movement), choose another random number
+                while(movement[spawnTo] == 0)
+                {
+                    spawnTo = rand()%4;
+                }
 
 
 
-            }
+            }//while loop end
         }
 
-        else if(menuOpt == "Scores")//---------------------------------------------------------------
+        else if(menuOpt == "Scores")//*****************************************************************************
         {
             cout << "see scores" <<endl;
 
         }
 
-        else if(menuOpt == "Quit")
+        else if(menuOpt == "Quit")//*******************************************************************************
         {
             cout << "Quitting";
             return 1;
@@ -137,6 +138,7 @@ int main()
 }
 
 //*****************************************************************************************************************
+//~ ~ ~ ~ Below are functions for Game objects ~ ~ ~ ~ ~ ~
 //*****************************************************************************************************************
 
 //constructor
@@ -216,8 +218,6 @@ void Gameboard::createBoard()
             i++;
         }
     }
-
-
 }
 
 void Gameboard::updateBoard(char key)
