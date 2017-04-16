@@ -202,7 +202,7 @@ int Gameboard::getTileValue(int i, int j)
 }
 
 //setter to place new tiles onto board
-int Gameboard::setTileValue(int i, int j, int value)
+void Gameboard::setTileValue(int i, int j, int value)
 {
     gameboard[i][j] = value;
 }
@@ -532,6 +532,31 @@ int Gameboard::highestTile()
 //
 //}
 
+int Gameboard::returnScore ()
+{
+    int sum;
+    int currentTile;
+
+    for (int i = 0; i < 4; i ++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            currentTile = gameboard[i][j];
+
+            if (currentTile == 1 || currentTile == 2)
+            {
+                continue;
+            }
+            currentTile /= 3;
+            currentTile = log2(currentTile);
+            currentTile++;
+            sum += pow(3,currentTile);
+        }
+    }
+    return sum;
+}
+
+
 bool canMerge(int num1, int num2)
 {
     //1 and 2 can merge with each other, so if they are 1 and 2 then they are able to merge
@@ -552,6 +577,7 @@ bool canMerge(int num1, int num2)
         return false;
     }
 }
+
 
 
 
