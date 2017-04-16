@@ -32,6 +32,7 @@ void Tiles::initialPool()
     random_shuffle(begin(pool), end(pool));
 }
 
+//Check if the pool of tiles is empty. If it is empty, return true; if not, return false.
 bool Tiles::isEmpty()
 {
     bool empty = false;
@@ -88,6 +89,7 @@ void Tiles::refreshTiles(Gameboard board)
     random_shuffle(begin(pool), end(pool));
 }
 
+//Get a tile
 int Tiles::getTile(Gameboard board)
 {
     //If the pool is empty, the pool is refreshed before a tile is returned
@@ -103,11 +105,13 @@ int Tiles::getTile(Gameboard board)
     return tile;
 }
 
+//Set maxTile equal to the current max value of the tile
 void Tiles::setMaxTile (int max)
 {
     maxTile = max;
 }
 
+//Print out the value of the max tile
 void Tiles::printMaxTile()
 {
     cout << maxTile << endl;
