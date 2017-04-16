@@ -285,7 +285,7 @@ double Statistics::Mean(string playerName)
     while(infile >> temp)
     {
         //takes each score in string, coverts score to int using atoi function, and stores int
-        cout << "Score: " << temp << endl;
+        cout << endl << "Score: " << temp;
 
         sum += atoi(temp.c_str());
 
