@@ -9,6 +9,8 @@
 #include <random>
 #include <ctime>
 
+#include "termProj.h"
+
 using namespace std;
 
 class Tiles
@@ -29,10 +31,10 @@ public:
 	bool isEmpty();
 
 	//This function refreshes the pool of tiles
-	void refreshTiles();
+	void refreshTiles(Gameboard board);
 
 	//This function returns one tile
-	int getTile();
+	int getTile(Gameboard board);
 
 	//This function sets the max tile value.
 	void setMaxTile(int max);
