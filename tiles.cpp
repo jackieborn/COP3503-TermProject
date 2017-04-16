@@ -42,7 +42,7 @@ bool Tiles::isEmpty()
     return empty;
 }
 
-void Tiles::refreshTiles()
+void Tiles::refreshTiles(Gameboard board)
 {
     //Clears pool, and fills pool with 4 1's, 4 2's, and 4 3's
     pool.clear();
@@ -88,13 +88,13 @@ void Tiles::refreshTiles()
     random_shuffle(begin(pool), end(pool));
 }
 
-int Tiles::getTile()
+int Tiles::getTile(Gameboard board)
 {
     //If the pool is empty, the pool is refreshed before a tile is returned
     bool empty = isEmpty();
     if(empty)
     {
-        refreshTiles();
+        refreshTiles(board);
     }
 
     //Grabs tile from index zero, erases value at that index, returns tile
