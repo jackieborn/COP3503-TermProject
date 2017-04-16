@@ -2,27 +2,42 @@
 #define STATS_H_INCLUDED
 
 #include <fstream>
+
 #include <iostream>
+
 #include <stdio.h>
+
 #include <stdlib.h>
+
 #include <string>
+
 #include <sstream>
+
 #include <regex>
 
-include "termProj.h"
+#include <math.h>       //floor
 
 using namespace std;
 
-class Statistics{
+class Statistics
+{
  private:
      string playerName;
+
      string score;
+
      string highestTile;
 
 
 public:
     //constructor
     Statistics();
+
+    //adds to a total list of scores from all games
+    void UpdateScoreList(int score);
+
+    //updates the master player list
+    bool UpdatePlayerNameList(string playerName);
 
     //checks if file exists. Returns false if file doesnt exist.
     bool fileExists(const string fileName);
@@ -55,19 +70,80 @@ public:
     int gamesPlayed(int playerName);
 
 };
-Statistics::Statistics(){
+Statistics::Statistics()
+{
 
 }
 
+//updates a score to the master list of scores
+void Statistics::UpdateScoreList(int score)
+{
+     //store file name
+     const string fileName = "ScoresMasterFile.txt";
+
+     //open stream in output mode
+     ofstream outfile;
+
+     //open file in append and ios_base::out and ios_base::in mode
+     //so a new line will be added to the end of the file
+     //and if the file to be opened isn't created yet, it creats a new file.
+     outfile.open(fileName, ios::app | ios_base::out | ios_base::in);
+
+     //adds score to end of file
+     outfile << score << endl;
+
+     //close stream
+     outfile.close();
+
+
+
+}
+bool Statistics::UpdatePlayerNameList(string playerName)
+{
+     //file name
+     const string fileName = "NamesMasterFile.txt";
+
+     //open file
+     ifstream infile(fileName);
+
+     //temp string variable to read in words from text file
+     string temp;
+
+     //run while text file has words
+     while(infile >> temp)
+        {
+        //if temp equals playerName, that player name is already being used and is unavailable
+        if(temp == playerName)
+        {
+            return false;
+        }
+
+     }
+     //close stream
+     infile.close();
+
+     //open stream
+     ofstream outfile;
+
+     //open file
+     outfile.open(fileName, ios::app | ios_base::out | ios_base::in);
+
+     //append new player name to file
+     outfile << playerName << endl;
+
+     //close file
+     outfile.close();
+
+     //return that file name is available
+     return true;
+
+}
 
 void Statistics::UpdatePlayerScore(string playerName, int score)
 {
 
  //fileName is the name of the file that will be opened
  string fileName = playerName + ".txt";
-
- //creates buffer to prevent overflow
- char buffer[256];
 
  //opens ofstream for writing
  ofstream outfile;
@@ -113,7 +189,8 @@ int Statistics::NumberOfPlayerGames(string playerName)
 }
 
 //if player reaches a new highest tile, the new highest tile is stored
-void Statistics::UpdatePlayerHighestTile(string playerName, int tileScore){
+void Statistics::UpdatePlayerHighestTile(string playerName, int tileScore)
+{
     //holds the tile from the most recent game
     int currentTileScore;
 
@@ -174,13 +251,12 @@ void Statistics::UpdatePlayerHighestTile(string playerName, int tileScore){
         outfile.close();
     }
 
-    int tempScore;
 
 }
 
 
 
-bool fileExists(const string fileName)
+bool Statistics::fileExists(const string fileName)
 {
     //open file in read mode
     ifstream infile(fileName);
@@ -196,6 +272,7 @@ double Statistics::Mean(string playerName)
 
     //stores sum of scores
     double sum = 0;
+
     double mean;
 
     //stores readline from file
@@ -213,7 +290,8 @@ double Statistics::Mean(string playerName)
         sum += atoi(temp.c_str());
 
         //divide sum by total games
-        mean = sum/numOfGames;
+        //round mean down to next integer
+        mean = floor(sum/numOfGames);
      }
 
      return mean;
