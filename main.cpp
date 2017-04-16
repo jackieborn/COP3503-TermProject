@@ -15,11 +15,12 @@ using namespace std;
 
 int main()
 {
-    //srand(time(nullptr));//get current time as seed number for rand()
+    srand(time(nullptr));//get current time as seed number for rand()
 
     string menuOpt; //which menu option user chooses
     Gameboard board; //create game board obj
     char key; //which direction user moves
+    bool gameOver = false; //true if no more moves left for player to make
 
     int temp[4][4]; //stores game board for comparison - to find which rows/cols moved
     int movement[4] = {0};  //array to store which row/col saw movement after user plays a turn
@@ -34,7 +35,7 @@ int main()
 
     while(true)
         {
-        cout << "Welcome to Threes:" << endl;
+        cout << "Welcome to Threes!:" << endl;
         cout << "The OG number tile game!!!" << endl;
         cout << "MAIN MENU: Type your selection (exactly as shown)" << endl;
         cout << "Tutorial" << endl;
@@ -53,7 +54,7 @@ int main()
             board.createBoard();
             firstTurn = true;
 
-            while(true)
+            while(gameOver == false)
             {
                 board.printBoard();
 
@@ -64,9 +65,9 @@ int main()
                 }
 
                 //stores current board into temp 2d array
-                for(int i=0; i<3; i++)
+                for(int i=0; i<4; i++)
                 {
-                    for(int j=0; j<3; j++)
+                    for(int j=0; j<4; j++)
                     {
                         temp[i][j] = board.getTileValue(i, j);
                     }
@@ -74,6 +75,11 @@ int main()
 
                 cout << "Use w/a/s/d to choose which direction you want to shift tiles" << endl;
                 cout << "then hit Enter." << endl;
+
+                //get new tile to spawn onto board
+                newTile = tileSet.getTile(board);
+                cout << "NEXT TILE: " << newTile << endl;
+
                 cin >> key;
                 board.updateBoard(key);
 
@@ -82,9 +88,9 @@ int main()
                 if((key == 'w') || (key == 's'))
                 {
                     //compares each spot in board after user makes move, to board before movement
-                    for(int j=0; j<3; j++)
+                    for(int j=0; j<4; j++)
                     {
-                        for(int i=0; i<3; i++)
+                        for(int i=0; i<4; i++)
                         {
                             if(temp[i][j] != board.getTileValue(i, j))
                             {
@@ -99,9 +105,9 @@ int main()
                 if((key == 'a') || (key == 'd'))
                 {
                     //compares each spot in board after user makes move to board, to board before movement
-                    for(int i=0; i<3; i++)
+                    for(int i=0; i<4; i++)
                     {
-                        for(int j=0; j<3; j++)
+                        for(int j=0; j<4; j++)
                         {
                             if(temp[i][j] != board.getTileValue(i, j))
                             {
@@ -111,47 +117,72 @@ int main()
                     }
                 }
 
-                //generate random number to pick a index from movement array
-                //which will be the row/col the new tile generates in
-                int spawnTo = rand()%4;
-                //while the array index is 0 (row/col that didn't see movement), choose another random number
-                while(movement[spawnTo] == 0)
+                //checks to see if the user made a valid movement
+                //check to see if any tile movement actually happened
+                bool validMove = false; //when board before & after player move is the same
+                for(int i=0; i<4; i++)
                 {
-                    spawnTo = rand()%4;
+                    for(int j=0; j<4; j++)
+                    {
+                        //so long as one tile value is different after the move, the player move is valid
+                        if(board.getTileValue(i, j) != temp[i][j])
+                        {
+                            validMove = true;
+                        }
+                    }
                 }
 
-                //if player's first turn, must call initialPool (since 9 of 12 tiles already on board)
-                if(firstTurn)
+                if(validMove)
                 {
-                    tileSet.initialPool();
-                    firstTurn = false;
+                    //generate random number to pick a index from movement array
+                    //which will be the row/col the new tile generates in
+                    int spawnTo = rand()%4;
+                    //while the array index is 0 (row/col that didn't see movement), choose another random number
+                    while(movement[spawnTo] == 0)
+                    {
+                        spawnTo = rand()%4;
+                    }
+
+                    //if player's first turn, must call initialPool (since 9 of 12 tiles already on board)
+                    if(firstTurn)
+                    {
+                        tileSet.initialPool();
+                        firstTurn = false;
+                    }
+
+//~~
+
+                    //place new tile on board
+                    if(key == 'w')
+                    {
+                        //if player moved up, tile spawns in bottom row
+                        board.setTileValue(3, spawnTo, newTile);
+                    }
+                    else if(key == 'a')
+                    {
+                        //if player moved left, tile spawns in rightmost column
+                        board.setTileValue(spawnTo, 3, newTile);
+                    }
+                    else if(key == 's')
+                    {
+                        //if player moved down, tile spawns in top row
+                        board.setTileValue(0, spawnTo, newTile);
+                    }
+                    else if(key == 'd')
+                    {
+                        //if player moved right, tile spawns in leftmost column
+                        board.setTileValue(spawnTo, 0, newTile);
+                    }
                 }
 
-                //get new tile to spawn onto board
-                newTile = tileSet.getTile(board);
-
-                //place new tile on board
-                if(key == 'w')
+                else if (!validMove)
                 {
-                    //if player moved up, tile spawns in bottom row
-                    board.setTileValue(3, spawnTo, newTile);
-                }
-                else if(key == 'a')
-                {
-                    //if player moved left, tile spawns in rightmost column
-                    board.setTileValue(spawnTo, 3, newTile);
-                }
-                else if(key == 's')
-                {
-                    //if player moved down, tile spawns in top row
-                    board.setTileValue(0, spawnTo, newTile);
-                }
-                else if(key == 'd')
-                {
-                    //if player moved right, tile spawns in leftmost column
-                    board.setTileValue(spawnTo, 0, newTile);
+                    cout << "BOOOO!" << endl;
                 }
 
+                //check if the player has any moves left to make
+                //if no more viable moves, then the game is over
+                gameOver = board.gameOver();
 
 
 
@@ -159,7 +190,8 @@ int main()
 
 
 
-            }//while loop end
+
+            }//start game - while loop end
         }
 
         else if(menuOpt == "Scores")//*****************************************************************************
@@ -435,9 +467,6 @@ void Gameboard::updateBoard(char key)
             }
         }
     }
-
-    //get new tile after movement
-
 }
 
 void Gameboard::printBoard()
@@ -477,85 +506,169 @@ int Gameboard::highestTile()
 
 }
 
-/*bool Gameboard::gameOver()
+bool Gameboard::gameOver()
 {
     //Checks to see if the game is over
     //Game is over if the player cannot make anymore moves, if the board is full
-    bool notOver;
 
+    for(int i = 0; i < 4; i++)
+    {
+        for(int j = 0; j < 4; j++)
+        {
+            if(gameboard[i][j] == 0)
+            {
+                return false;
+            }
+        }
+    }
+
+    if(canMerge(gameboard[0][0], gameboard[0][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][1], gameboard[0][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][2], gameboard[0][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][0], gameboard[1][1]) == true)
+    {
+       return false;
+    }
+    else if(canMerge(gameboard[1][1], gameboard[1][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][2], gameboard[1][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][0], gameboard[2][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][1], gameboard[2][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][2], gameboard[2][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[3][0], gameboard[3][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[3][1], gameboard[3][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[3][2], gameboard[3][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][0], gameboard[1][0]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][0], gameboard[2][0]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][0], gameboard[3][0]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][1], gameboard[1][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][1], gameboard[2][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][1], gameboard[3][1]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][2], gameboard[1][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][2], gameboard[2][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][2], gameboard[3][2]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[0][3], gameboard[1][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[1][3], gameboard[2][3]) == true)
+    {
+        return false;
+    }
+    else if(canMerge(gameboard[2][3], gameboard[3][3]) == true)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
     //Parse through the gameboard sideways
     //Check to see if the tile to the right of the current can merge with the current tile
     //Also checks to see if tile to the right is empty (is equal to 0)
     //If it can or a space is empty, more moves can be made and game is not over
-    for(int i = 0; i < 4; i++)
-    {
-        for(int j = 0; j < 3; j++)
-        {
-            int curr = gameboard[i][j];
-            int next = gameboard[i][j+1];
-
-            notOver = gameboard.canMerge(curr, next);
-
-            if(notOver || next == 0)
-            {
-                return notOver;
-            }
-        }
-
-        //Parse through the gameboard going down
-        //Check to see if the tile below the current can merge with the current tile
-        //Also checks to see if the tile below is empty
-        //If it can merge or a space is empty, more moves can be made and game is not over
-        for(int j = 0; j < 4; j++)
-        {
-            for(int i = 0; i < 3; i++)
-            {
-                int curr = gameboard[i][j];
-                int below = gameboard[i+1][j];
-
-                notOver = gameboard.canMerge(curr, below);
-
-                if(notOver || below == 0)
-                {
-                    return notOver;
-                }
-            }
-        }
-
-        return notOver;
-    }
-}*/
+//    for(int i = 0; i < 4; i++)
+//    {
+//        for(int j = 0; j < 3; j++)
+//        {
+//            int curr = gameboard[i][j];
+//            int next = gameboard[i][j+1];
+//
+//            notOver = canMerge(curr, next);
+//
+//            if(notOver==true || next == 0)
+//            {
+//                return notOver;
+//            }
+//        }
+//    }
+//
+//    //Parse through the gameboard going down
+//    //Check to see if the tile below the current can merge with the current tile
+//    //Also checks to see if the tile below is empty
+//    //If it can merge or a space is empty, more moves can be made and game is not over
+//    for(int j = 0; j < 4; j++)
+//    {
+//        for(int i = 0; i < 3; i++)
+//        {
+//            int curr = gameboard[i][j];
+//            int below = gameboard[i+1][j];
+//
+//            notOver = canMerge(curr, below);
+//
+//            if(notOver || below == 0)
+//            {
+//                return notOver;
+//            }
+//        }
+//    }
+//    return notOver;
+}
 
 //void seedNumGen()
 //{
 //    return srand(time(nullptr));
 //
 //}
-
-int Gameboard::returnScore ()
-{
-    int sum;
-    int currentTile;
-
-    for (int i = 0; i < 4; i ++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            currentTile = gameboard[i][j];
-
-            if (currentTile == 1 || currentTile == 2)
-            {
-                continue;
-            }
-            currentTile /= 3;
-            currentTile = log2(currentTile);
-            currentTile++;
-            sum += pow(3,currentTile);
-        }
-    }
-    return sum;
-}
-
 
 bool canMerge(int num1, int num2)
 {
@@ -577,7 +690,6 @@ bool canMerge(int num1, int num2)
         return false;
     }
 }
-
 
 
 
