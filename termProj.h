@@ -20,18 +20,17 @@ public:
     Gameboard(); //constructor
 
     int getTileValue(int i, int j); //to get the tile value at a certain spot on gameboard
+    int setTileValue(int i, int j, int value); //to spawn new tile after each turn
 
     void createBoard(); //makes new empty board, gens 9 rand tiles to place randomly on board
     void updateBoard(char key); //updates after player movement
     void printBoard(); //displays board
     void deleteBoard(); //deletes board after game over/quit
     int highestTile(); //parses board & returns highest tile number
+    bool gameOver();//when all spaces on board full, check if Game Over
+
     //~Gameboard(); //destructor
 };
-
-
-
-//void seedNumGen(); //randomly selects number from certain range??????????????????????????
 
 bool canMerge(int num1, int num2); //checks if two tiles can merge
 
