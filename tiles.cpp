@@ -105,18 +105,19 @@ int Tiles::getTile(Gameboard board)
     return tile;
 }
 
-//Set maxTile equal to the current max value of the tile
+//Set the max tile value 
 void Tiles::setMaxTile (int max)
 {
     maxTile = max;
 }
 
-//Print out the value of the max tile
+//Print out the value of the max tile (mostly used for debugging)
 void Tiles::printMaxTile()
 {
     cout << maxTile << endl;
 }
 
+//Prints the pool of tiles (mostly used for debugging)
 void Tiles::printPool()
 {
     for (int i = 0; i < pool.size(); i++)
