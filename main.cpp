@@ -8,6 +8,7 @@
 
 #include "tiles.h"
 #include "termProj.h"
+#include "stats.h"
 
 
 
@@ -31,7 +32,25 @@ int main()
     bool firstTurn;//if player's 1st turn, must call initialPool since 9/12 tiles already on board
     int newTile; //new tile that will spawn onto board every turn
 
+    Statistics stats;//create object
+    string player; //holds player name
+
 //--------------------------------------------------------------------------------------------------
+    //asks player to enter name
+    cout << "Please enter player name: " << endl;
+    cin >> player;
+
+    //checks to see if name is already taken in the stats file
+    bool nameAccepted = stats.UpdatePlayerNameList(player);
+    while(nameAccepted == false)
+    {
+        cout << "Name already taken. Please enter another: " << endl;
+        cin >> player;
+        nameAccepted = stats.UpdatePlayerNameList(player);
+    }
+
+
+
 
     while(true)
         {
@@ -177,26 +196,38 @@ int main()
 
                 else if (!validMove)
                 {
-                    cout << "BOOOO!" << endl;
+                    cout << "BOOOO! Invalid move." << endl << endl;
                 }
 
                 //check if the player has any moves left to make
                 //if no more viable moves, then the game is over
                 gameOver = board.gameOver();
 
-
-
-
-
-
-
-
             }//start game - while loop end
+
+            //print board that is Game Over
+            board.printBoard();
+
+            cout << "GAME OVER!" << endl << endl;
+
+            //updates player's highest tile achieved in the game
+            stats.UpdatePlayerHighestTile(player, board.highestTile());
+
+            //updates player's highest game score
+            stats.UpdatePlayerScore(player, board.returnScore());
+
+            //updates player's total lifetime score
+            stats.UpdateScoreList(board.returnScore());
+
+            board.~Gameboard();
+
         }
 
         else if(menuOpt == "Scores")//*****************************************************************************
         {
-            cout << "see scores" <<endl;
+            cout << endl << "Mean score: " << stats.Mean(player) << endl;
+            cout << "Number of games played: " << stats.NumberOfPlayerGames(player) << endl;
+            cout << "See text file for player history." << endl << endl;
 
         }
 
@@ -670,6 +701,30 @@ bool Gameboard::gameOver()
 //
 //}
 
+int Gameboard::returnScore ()
+{
+    int sum;
+    int currentTile;
+
+    for (int i = 0; i < 4; i ++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            currentTile = gameboard[i][j];
+
+            if (currentTile == 1 || currentTile == 2)
+            {
+                continue;
+            }
+            currentTile /= 3;
+            currentTile = log2(currentTile);
+            currentTile++;
+            sum += pow(3,currentTile);
+        }
+    }
+    return sum;
+}
+
 bool canMerge(int num1, int num2)
 {
     //1 and 2 can merge with each other, so if they are 1 and 2 then they are able to merge
@@ -695,15 +750,11 @@ bool canMerge(int num1, int num2)
 
 
 
-//destructor (delete array so no memory leak)
-/*Gameboard::~Gameboard()
+//destructor (delete game board object)
+Gameboard::~Gameboard()
 {
-    for (int i = 0; i < ROWS; ++i){
-        delete [] gameboard[i];
-    }
-
-    delete []gameboard;
- } */
+    delete gameboard;
+ }
 
 
 
