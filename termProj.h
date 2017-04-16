@@ -28,9 +28,9 @@ public:
     void deleteBoard(); //deletes board after game over/quit
     int highestTile(); //parses board & returns highest tile number
     bool gameOver();//when all spaces on board full, check if Game Over
-    int returnScore();
+    int returnScore();//calculates score after game over
 
-    //~Gameboard(); //destructor
+    ~Gameboard(); //destructor
 };
 
 bool canMerge(int num1, int num2); //checks if two tiles can merge
