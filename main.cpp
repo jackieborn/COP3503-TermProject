@@ -65,7 +65,75 @@ int main()
 
         if(menuOpt == "Tutorial")//********************************************************************************
         {
-            cout << "go to tutorial" <<endl;
+            cout << "Welcome to the Threes! Tutorial." << endl;
+            cout << "--------------------------------" << endl;
+            cout << endl;
+            cout << "Rules for playing Threes!" << endl;
+            cout << endl;
+            cout << "Threes! is a tile merging game, where" << endl;
+            cout << "you are tasked with merging as many tiles" << endl;
+            cout << "as you can before your board becomes full," << endl;
+            cout << "and you are unable to make any more moves." << endl;
+            cout << endl;
+            cout << "During each move, you will choose to move either" << endl;
+            cout << "up, down, left, or right. By doing so, each tile" << endl;
+            cout << "on the board will attempt to move in that direction!" << endl;
+            cout << "If a tile can move 'into' another tile of the same value," << endl;
+            cout << "they will 'merge', forming a larger tile, which is worth more" << endl;
+            cout << "points! Tiles that cannot merge or do not have a free space to" << endl;
+            cout << "move in to will stay where they are (blank spaces are represented by underscores)." << endl;
+            cout << endl;
+            cout << "--------------------------------" << endl;
+            cout << endl;
+            cout << "Merging tiles" << endl;
+            cout << endl;
+            cout << "When two tiles of the same value merge together, they form a higher" << endl;
+            cout << "tile, equal to the sum of the two tiles that just merged. For example," << endl;
+            cout << "two tiles of value '3' merge to form one tile of value '6'. Similarly," << endl;
+            cout << "two tiles of value '12' merge to form a tile of value '24'. The" << endl;
+            cout << "exception to this are '1's and '2's. Tiles of the value '1' MUST merge with" << endl;
+            cout << "a tile of value '2' to form a single tile of value '3'." << endl;
+            cout << endl;
+            cout << "--------------------------------" << endl;
+            cout << endl;
+            cout << "New tiles" << endl;
+            cout << endl;
+            cout << "Each time you make a move, a new tile will appear on the board." << endl;
+            cout << "The tile will appear on the side you moved away from. For example," << endl;
+            cout << "moving left will cause a tile to appear from the right and moving down" << endl;
+            cout << "will cause a tile to appear from the top. The tile will spawn in a row" << endl;
+            cout << "or column that moved during your previous move." << endl;
+            cout << endl;
+            cout << "--------------------------------" << endl;
+            cout << endl;
+            cout << "Game over and scores" << endl;
+            cout << endl;
+            cout << "The game will end if you fill up your board with 16 tiles, and you" << endl;
+            cout << "are left with no more valid moves. At that point, a score will be" << endl;
+            cout << "calculated based on the tiles currently on your board. A scoring table" << endl;
+            cout << "can be found below:" << endl;
+            cout << endl;
+            cout << "Tiles          Score" << endl;
+            cout << endl;
+            cout << "1              0" << endl;
+            cout << "2              0" << endl;
+            cout << "3              3" << endl;
+            cout << "6              9" << endl;
+            cout << "12             27" << endl;
+            cout << "24             81" << endl;
+            cout << "48             243" << endl;
+            cout << "96             729" << endl;
+            cout << "192            2187" << endl;
+            cout << "384            6561" << endl;
+            cout << "768            19683" << endl;
+            cout << "1536           59049" << endl;
+            cout << "3072           177147" << endl;
+            cout << "6144           531441" << endl;
+            cout << endl;
+            cout << "Did you get all that?" << endl;
+            cout << endl;
+            cout << "Happy Threes!" << endl;
+            cout << endl;
         }
 
         else if(menuOpt == "Start")//******************************************************************************
