@@ -39,6 +39,7 @@ int main()
     //asks player to enter name
     cout << "Please enter player name: " << endl;
     cin >> player;
+    cout << endl;
 
     //checks to see if name is already taken in the stats file
     bool nameAccepted = stats.UpdatePlayerNameList(player);
@@ -46,6 +47,7 @@ int main()
     {
         cout << "Name already taken. Please enter another: " << endl;
         cin >> player;
+        cout << endl;
         nameAccepted = stats.UpdatePlayerNameList(player);
     }
 
@@ -54,6 +56,10 @@ int main()
 
     while(true)
         {
+        //reset gameOver to false
+        gameOver = false;
+
+        cout << endl;
         cout << "Welcome to Threes!:" << endl;
         cout << "The OG number tile game!!!" << endl;
         cout << "MAIN MENU: Type your selection (exactly as shown)" << endl;
@@ -63,6 +69,7 @@ int main()
         cout << "Quit" << endl;
         cin >> menuOpt;
 
+        //prints out information about the game & how to play
         if(menuOpt == "Tutorial")//********************************************************************************
         {
             cout << "Welcome to the Threes! Tutorial." << endl;
@@ -293,15 +300,23 @@ int main()
 
         else if(menuOpt == "Scores")//*****************************************************************************
         {
-            cout << endl << "Mean score: " << stats.Mean(player) << endl;
-            cout << "Number of games played: " << stats.NumberOfPlayerGames(player) << endl;
-            cout << "See text file for player history." << endl << endl;
+            if(stats.NumberOfPlayerGames(player) == 0)
+            {
+                cout << endl << "You haven't played yet!" << endl << endl;
+            }
+            else
+            {
+                cout << endl << "Mean score: " << stats.Mean(player) << endl;
+                cout << "Number of games played: " << stats.NumberOfPlayerGames(player) << endl;
+                cout << "See text file for player history." << endl << endl;
+            }
+
 
         }
 
         else if(menuOpt == "Quit")//*******************************************************************************
         {
-            cout << "Quitting";
+            cout << endl << "Quitting";
             return 1;
         }
 
